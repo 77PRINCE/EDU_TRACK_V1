@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Style.css">
+    <title>EduTrack Pro - Student Result Processing System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+        
+    </script>
+
+
+    <!-- ═══════════ SIDEBAR ═══════════ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="sidebar-logo">ET</div>
+            <div class="brand-text-group">
+                <span class="sidebar-brand-text">EduTrack</span>
+                <span class="sidebar-brand-sub">Pro System</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-item active" data-section="dashboard"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></div>
+            <div class="nav-item" data-section="form"><span class="nav-icon">📝</span><span class="nav-label">Add Student</span></div>
+            <div class="nav-item" data-section="records"><span class="nav-icon">📋</span><span class="nav-label">All Records</span></div>
+            <div class="nav-item" data-section="analytics"><span class="nav-icon">📈</span><span class="nav-label">Analytics</span></div>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="sidebar-toggle-btn" id="sidebarToggleBtn" title="Toggle Sidebar">☰</button>
+        </div>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ═══════════ MAIN CONTENT ═══════════ -->
+    <main class="main-content" id="mainContent">
+        <!-- TOP HEADER -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">☰</button>
+                <div class="header-logo-area">
+                    <div class="header-logo-icon">ET</div>
+                    <span class="header-title">EduTrack <span>Pro</span></span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="header-date-clock">
+                    <span class="header-date" id="headerDate"></span>
+                    <span class="header-clock" id="headerClock"></span>
+                </div>
+                <div class="header-badge" title="Admin">AD</div>
+            </div>
+        </header>
+
+        <!-- DASHBOARD CONTENT -->
+        <div class="dashboard-content">
+            <!-- POSITION 1: STATS CARDS -->
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card">
+                    <div class="stat-icon">👨‍🎓</div>
+                    <div class="stat-info"><span class="stat-label">Total Students</span><span class="stat-value" id="statTotal">0</span><span class="stat-sub">Enrolled records</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-info"><span class="stat-label">Pass Rate</span><span class="stat-value" id="statPassRate">0%</span><span class="stat-sub">Grades A–D</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚠️</div>
+                    <div class="stat-info"><span class="stat-label">Failures</span><span class="stat-value" id="statFailures">0</span><span class="stat-sub">Grade F</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📐</div>
+                    <div class="stat-info"><span class="stat-label">Class Average</span><span class="stat-value" id="statAverage">0.0</span><span class="stat-sub">Mean score</span></div>
+                </div>
+            </div>
+
+            <!-- POSITION 2: ADD STUDENT FORM -->
+            <div class="form-section" id="studentFormCard">
+                <h3 id="formTitle">📝 Add New Student</h3>
+                <p class="form-subtitle">Enter student details and scores below — all fields required</p>
+                <form id="studentForm" novalidate autocomplete="off">
+                    <input type="hidden" id="editId" value="">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentName">Full Name *</label>
+                            <input type="text" id="studentName" placeholder="e.g. Prince Yome" maxlength="80">
+                            <span class="error-msg" id="errName">Required field.</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentClass">Class code  *</label>
+                            <select id="studentClass">
+                                <option value="">-- Select Course  --</option>
+                                <option value="Grade 1">CEF344</option><option value="Grade 2">CEF346</option><option value="Grade 3">CEF350</option>
+                                <option value="Grade 4">CEF 352</option><option value="Grade 5">CEF342</option><option value="Grade 6">CEF356</option>
+                                <option value="JSS 1">EEF362</option><option value="JSS 2">CEF 364</option>
+                            </select>
+                            <span class="error-msg" id="errClass">Required.</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentSubject">Subject *</label>
+                            <select id="studentSubject">
+                                <option value="">-- Select --</option>
+                                <option value="Mathematics">Mathematics</option><option value="English">English</option>
+                                <option value="Physics">Physics</option><option value="Chemistry">Chemistry</option>
+                                <option value="Biology">Biology</option><option value="Computer Sci">Computer Sci</option>
+                                <option value="Economics">Economics</option><option value="Literature">Literature</option>
+                            </select>
+                            <span class="error-msg" id="errSubject">Required.</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="caScore">CA (0–30)</label>
+                            <input type="number" id="caScore" placeholder="0" min="0" max="30" step="1">
+                            <span class="form-hint">Max 30</span>
+                            <span class="error-msg" id="errCA">Must be 0–30.</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="examScore">Exam (0–70)</label>
+                            <input type="number" id="examScore" placeholder="0" min="0" max="70" step="1">
+                            <span class="form-hint">Max 70</span>
+                            <span class="error-msg" id="errExam">Must be 0–70.</span>
+                        </div>
+                        <div class="form-group btn-row" style="justify-content: flex-start;">
+                            <button type="submit" class="btn btn-primary" id="submitBtn">💾 Save Record</button>
+                            <button type="button" class="btn btn-outline" id="cancelBtn" style="display:none;">✕ Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- POSITION 3: STUDENT RECORDS TABLE -->
+            <div class="table-section" id="recordsSection">
+                <div class="table-header-row">
+                    <span class="table-title">📋 Student  Records</span>
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="searchInput" placeholder="Search any students records...">
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th><th>Name</th><th>Class</th><th>Subject</th>
+                                <th>CA</th><th>Exam</th><th>Total</th><th>Grade</th><th>Remarks</th><th>Act</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr class="empty-row"><td colspan="10"><div class="empty-table"><span class="empty-icon">📭</span>No records yet. Add a student!</div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- POSITION 4: GRADE DISTRIBUTION ANALYTICS -->
+            <div class="chart-section" id="analyticsSection">
+                <h3>📈 Smart Grade Distribution Analytics</h3>
+                <p class="chart-subtitle">Auto-calculated percentages — updated in real time</p>
+                <div class="chart-layout">
+                    <div class="chart-container" id="chartContainer">
+                        <canvas id="gradeChart"></canvas>
+                        <div class="doughnut-center-text" id="doughnutCenter">
+                            <div class="total-num" id="centerTotal">0</div>
+                            <div class="total-label">Students</div>
+                        </div>
+                    </div>
+                    <div class="chart-legend-custom" id="chartLegend"></div>
+                </div>
+                <div class="no-chart-data" id="noChartData" style="display:none;">📭 Add records to see grade distribution.</div>
+            </div>
+
+            <!-- POSITION 5: FOOTER -->
+            <div class="app-footer">
+                <div class="footer-brand">EduTrack <span>Pro</span> — Student Result Processing System</div>
+                <div class="footer-info">
+                    <span>Group 1</span>
+                    <span>Client &amp; Server</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ═══════════ TOAST CONTAINER ═══════════ -->
+    <div class="toast-container" id="toastContainer"></div>
+    <div id="modalRoot"></div>
+    <script src="function.js"></script>
+
+</body>
+</html>
